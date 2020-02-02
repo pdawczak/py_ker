@@ -31,16 +31,7 @@ class ThreeOfAKind(Rank):
 
 class Straight(Rank):
     def valid_for_cards(cards):
-        prev_value = cards[0].value
-
-        # Compare previous value against previous value
-        for curr_idx in range(1, len(cards)):
-            curr_value = cards[curr_idx].value
-            if (prev_value + 1) != curr_value:
-                return False
-            prev_value = curr_value
-
-        return True
+        return all_cards_in_increasing_value(cards)
 
 
 class Flush(Rank):
@@ -65,13 +56,8 @@ class FourOfAKind(Rank):
 class StraightFlush(Rank):
     def valid_for_cards(cards):
         # 1. Check if it is a Flush
-        prev_value = cards[0].value
-
-        for curr_idx in range(1, len(cards)):
-            curr_value = cards[curr_idx].value
-            if (prev_value + 1) != curr_value:
-                return False
-            prev_value = curr_value
+        if not all_cards_in_increasing_value(cards):
+            return False
 
         # 2. Check if all of the same suit
         suits_found = set([card.suit for card in cards])
@@ -81,13 +67,8 @@ class StraightFlush(Rank):
 class RoyalFlush(Rank):
     def valid_for_cards(cards):
         # 1. Check if it is a Flush
-        prev_value = cards[0].value
-
-        for curr_idx in range(1, len(cards)):
-            curr_value = cards[curr_idx].value
-            if (prev_value + 1) != curr_value:
-                return False
-            prev_value = curr_value
+        if not all_cards_in_increasing_value(cards):
+            return False
 
         # 2. Check if all of the same suit
         suits_found = set([card.suit for card in cards])
@@ -128,3 +109,22 @@ def count_occurrences_of_a_value(cards, look_for_counts_of=2):
 
     # 3. Finally, count those occurrences
     return len(found_occurrences)
+
+
+def all_cards_in_increasing_value(cards):
+    # 1. This will be a first element we will compare against
+    prev_value = cards[0].value
+
+    # 2. We will iterate for all the cards (but very first one) and compare its
+    #    value against previous one
+    for curr_idx in range(1, len(cards)):
+        curr_value = cards[curr_idx].value
+        # 3. If previous value increased by 1 is different than current value
+        #    that means the cards are not in an increasing order
+        if (prev_value + 1) != curr_value:
+            return False
+        prev_value = curr_value
+
+    # 4. If we arrived here, that means we didn't discover a point in a list
+    #    of cards that break the increase
+    return True
