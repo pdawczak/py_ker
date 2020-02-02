@@ -36,8 +36,7 @@ class Straight(Rank):
 
 class Flush(Rank):
     def valid_for_cards(cards):
-        suits_found = set([card.suit for card in cards])
-        return len(suits_found) == 1
+        return all_cards_of_a_single_suit(cards)
 
 
 class FullHouse(Rank):
@@ -60,8 +59,7 @@ class StraightFlush(Rank):
             return False
 
         # 2. Check if it is Flush
-        suits_found = set([card.suit for card in cards])
-        return len(suits_found) == 1
+        return all_cards_of_a_single_suit(cards)
 
 
 class RoyalFlush(Rank):
@@ -71,10 +69,8 @@ class RoyalFlush(Rank):
             return False
 
         # 2. Check if it is Flush
-        suits_found = set([card.suit for card in cards])
-        if len(suits_found) != 1:
+        if not all_cards_of_a_single_suit(cards):
             return False
-
 
         # 3. Check if the first card is a 10 (as only then Ace will be last one)
         return cards[0].value == 10
@@ -128,3 +124,8 @@ def all_cards_in_increasing_value(cards):
     # 4. If we arrived here, that means we didn't discover a point in a list
     #    of cards that break the increase
     return True
+
+
+def all_cards_of_a_single_suit(cards):
+    suits_found = set([card.suit for card in cards])
+    return len(suits_found) == 1
