@@ -50,3 +50,9 @@ def test_it_ranks_list_of_cards():
     cards_with_royal_flush = [Card("TH"), Card("JH"), Card("QH"), Card("KH"), Card("AH")]
     assert RoyalFlush.valid_for_cards(cards_with_royal_flush)
     assert not RoyalFlush.valid_for_cards(cards_with_straight_flush)
+
+
+def test_ranks_preserve_order():
+    assert Highcard() < Pair() < TwoPairs() < ThreeOfAKind() < Straight() < \
+             Flush() < FullHouse() < FourOfAKind() < StraightFlush() < \
+             RoyalFlush()

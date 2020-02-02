@@ -1,42 +1,76 @@
+from functools import total_ordering
+
 from abc import ABC, abstractmethod
 
 from collections import Counter
 
 
+@total_ordering
 class Rank(ABC):
     @abstractmethod
     def valid_for_cards(cards):
         pass
+
+    @abstractmethod
+    def rank_value(self):
+        pass
+
+    def __eq__(self, other_rank):
+        return self.rank_value() == other_rank.rank_value()
+
+    def __neq__(self, other_rank):
+        return not (self.rank_value() == other_rank.rank_value())
+
+    def __lt__(self, other_rank):
+        return self.rank_value() < other_rank.rank_value()
 
 
 class Highcard(Rank):
     def valid_for_cards(cards):
         return True
 
+    def rank_value(self):
+        return 1
+
 
 class Pair(Rank):
     def valid_for_cards(cards):
         return count_occurrences_of_a_value(cards, look_for_counts_of=2) == 1
+
+    def rank_value(self):
+        return 2
 
 
 class TwoPairs(Rank):
     def valid_for_cards(cards):
         return count_occurrences_of_a_value(cards, look_for_counts_of=2) == 2
 
+    def rank_value(self):
+        return 3
+
 
 class ThreeOfAKind(Rank):
     def valid_for_cards(cards):
         return count_occurrences_of_a_value(cards, look_for_counts_of=3) == 1
+
+    def rank_value(self):
+        return 4
 
 
 class Straight(Rank):
     def valid_for_cards(cards):
         return all_cards_in_increasing_value(cards)
 
+    def rank_value(self):
+        return 5
+
 
 class Flush(Rank):
     def valid_for_cards(cards):
         return all_cards_of_a_single_suit(cards)
+
+    def rank_value(self):
+        return 6
 
 
 class FullHouse(Rank):
@@ -46,10 +80,16 @@ class FullHouse(Rank):
 
         return (found_pairs == 1) and (found_tripples == 1)
 
+    def rank_value(self):
+        return 7
+
 
 class FourOfAKind(Rank):
     def valid_for_cards(cards):
         return count_occurrences_of_a_value(cards, look_for_counts_of=4) == 1
+
+    def rank_value(self):
+        return 8
 
 
 class StraightFlush(Rank):
@@ -60,6 +100,9 @@ class StraightFlush(Rank):
 
         # 2. Check if it is Flush
         return all_cards_of_a_single_suit(cards)
+
+    def rank_value(self):
+        return 9
 
 
 class RoyalFlush(Rank):
@@ -74,6 +117,9 @@ class RoyalFlush(Rank):
 
         # 3. Check if the first card is a 10 (as only then Ace will be last one)
         return cards[0].value == 10
+
+    def rank_value(self):
+        return 10
 
 
 def count_occurrences_of_a_value(cards, look_for_counts_of=2):
