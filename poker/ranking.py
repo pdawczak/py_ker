@@ -55,22 +55,22 @@ class FourOfAKind(Rank):
 
 class StraightFlush(Rank):
     def valid_for_cards(cards):
-        # 1. Check if it is a Flush
+        # 1. Check if it is Straight
         if not all_cards_in_increasing_value(cards):
             return False
 
-        # 2. Check if all of the same suit
+        # 2. Check if it is Flush
         suits_found = set([card.suit for card in cards])
         return len(suits_found) == 1
 
 
 class RoyalFlush(Rank):
     def valid_for_cards(cards):
-        # 1. Check if it is a Flush
+        # 1. Check if it is Straight
         if not all_cards_in_increasing_value(cards):
             return False
 
-        # 2. Check if all of the same suit
+        # 2. Check if it is Flush
         suits_found = set([card.suit for card in cards])
         if len(suits_found) != 1:
             return False
