@@ -24,6 +24,9 @@ class Rank(ABC):
     def __lt__(self, other_rank):
         return self.rank_value() < other_rank.rank_value()
 
+    def __repr__(self):
+        return "<Rank: {}>".format(self.__class__.__name__)
+
 
 class Highcard(Rank):
     def valid_for_cards(cards):
