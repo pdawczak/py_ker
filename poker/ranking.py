@@ -16,23 +16,17 @@ class Highcard(Rank):
 
 class Pair(Rank):
     def valid_for_cards(cards):
-        values_counter = Counter([card.value for card in cards])
-        found_pairs = list(filter(lambda x: x[1] == 2, values_counter.items()))
-        return len(found_pairs) == 1
+        return count_occurrences_of_a_value(cards, look_for_counts_of=2) == 1
 
 
 class TwoPairs(Rank):
     def valid_for_cards(cards):
-        values_counter = Counter([card.value for card in cards])
-        found_pairs = list(filter(lambda x: x[1] == 2, values_counter.items()))
-        return len(found_pairs) == 2
+        return count_occurrences_of_a_value(cards, look_for_counts_of=2) == 2
 
 
 class ThreeOfAKind(Rank):
     def valid_for_cards(cards):
-        values_counter = Counter([card.value for card in cards])
-        found_tripples = list(filter(lambda x: x[1] == 3, values_counter.items()))
-        return len(found_tripples) == 1
+        return count_occurrences_of_a_value(cards, look_for_counts_of=3) == 1
 
 
 class Straight(Rank):
@@ -57,19 +51,15 @@ class Flush(Rank):
 
 class FullHouse(Rank):
     def valid_for_cards(cards):
-        values_counter = Counter([card.value for card in cards])
-        found_pairs = list(filter(lambda x: x[1] == 2, values_counter.items()))
+        found_pairs = count_occurrences_of_a_value(cards, look_for_counts_of=2)
+        found_tripples = count_occurrences_of_a_value(cards, look_for_counts_of=3)
 
-        values_counter = Counter([card.value for card in cards])
-        found_tripples = list(filter(lambda x: x[1] == 3, values_counter.items()))
-        return (len(found_pairs) == 1) and (len(found_tripples) == 1)
+        return (found_pairs == 1) and (found_tripples == 1)
 
 
 class FourOfAKind(Rank):
     def valid_for_cards(cards):
-        values_counter = Counter([card.value for card in cards])
-        found_fourths = list(filter(lambda x: x[1] == 4, values_counter.items()))
-        return len(found_fourths) == 1
+        return count_occurrences_of_a_value(cards, look_for_counts_of=4) == 1
 
 
 class StraightFlush(Rank):
@@ -107,3 +97,34 @@ class RoyalFlush(Rank):
 
         # 3. Check if the first card is a 10 (as only then Ace will be last one)
         return cards[0].value == 10
+
+
+def count_occurrences_of_a_value(cards, look_for_counts_of=2):
+    # 1. Count occurrences of values, eg:
+    #
+    #    "2C 2H 3C 3H 5H"
+    #
+    # will be:
+    #
+    #    {
+    #        2: 2, # There are two 2s
+    #        3: 2, # There are two 3s
+    #        5: 1, # There is one 5
+    #    }
+    #
+    values_counter = Counter([card.value for card in cards])
+
+    # 2. Find only the entries of expected look_for_counts_of, eg:
+    #
+    # For previous count occurrences and assumed look_for_counts_of=1:
+    #
+    #     [(5, 1)]
+    #
+    # but for look_for_counts_of=2:
+    #
+    #     [(2, 2), (3, 2)]
+    #
+    found_occurrences = list(filter(lambda x: x[1] == look_for_counts_of, values_counter.items()))
+
+    # 3. Finally, count those occurrences
+    return len(found_occurrences)
