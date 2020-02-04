@@ -1,5 +1,6 @@
 import pytest
 
+from ..poker.ranking import Ranking
 from ..poker.ranking import Highcard, Pair, TwoPairs, ThreeOfAKind, Straight, Flush, FullHouse, FourOfAKind, StraightFlush, RoyalFlush
 
 from ..poker.cards import Card
@@ -58,3 +59,16 @@ def test_ranks_preserve_order():
     assert Highcard() < Pair() < TwoPairs() < ThreeOfAKind() < Straight() < \
              Flush() < FullHouse() < FourOfAKind() < StraightFlush() < \
              RoyalFlush()
+
+
+def test_ranking_returns_proper_strategy_for_list_of_cards():
+    assert type(Ranking.rank(NON_RANKED_CARDS)) == Highcard
+    assert type(Ranking.rank(CARDS_WITH_A_PAIR)) == Pair
+    assert type(Ranking.rank(CARDS_WITH_TWO_PAIRS)) == TwoPairs
+    assert type(Ranking.rank(CARDS_WITH_THREE_OF_A_KIND)) == ThreeOfAKind
+    assert type(Ranking.rank(CARDS_WITH_STRAIGHT)) == Straight
+    assert type(Ranking.rank(CARDS_WITH_FULL_HOUSE)) == FullHouse
+    assert type(Ranking.rank(CARDS_WITH_FLUSH)) == Flush
+    assert type(Ranking.rank(CARDS_WITH_FOUR_OF_A_KIND)) == FourOfAKind
+    assert type(Ranking.rank(CARDS_WITH_STRAIGHT_FLUSH)) == StraightFlush
+    assert type(Ranking.rank(CARDS_WITH_ROYAL_FLUSH)) == RoyalFlush

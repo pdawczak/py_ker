@@ -5,6 +5,24 @@ from abc import ABC, abstractmethod
 from collections import Counter
 
 
+class Ranking:
+    def rank(cards):
+        all_rankings = [RoyalFlush,
+                        StraightFlush,
+                        FourOfAKind,
+                        FullHouse,
+                        Flush,
+                        Straight,
+                        ThreeOfAKind,
+                        TwoPairs,
+                        Pair,
+                        Highcard]
+
+        for rank_class in all_rankings:
+            if rank_class.valid_for_cards(cards):
+                return rank_class()
+
+
 @total_ordering
 class Rank(ABC):
     @abstractmethod
