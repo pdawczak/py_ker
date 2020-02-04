@@ -6,7 +6,37 @@ from collections import Counter
 
 
 class Ranking:
+    """It allows ranking of a set of the cards."""
+
     def rank(cards):
+        """It perform the ranking.
+
+        It is a factory that will accept list of Card objects and will perform
+        ranking, which effect will be an instance one of specific Rank instances.
+
+        Parameters
+        ----------
+        cards : list(Card)
+            List of cards which will be ranked
+
+        Returns
+        -------
+        Based on the set of the cards, it will return one of Rank strategies
+
+        Example
+        -------
+
+            Given a set of cards, it will return one of Rank instances, like:
+
+            >>> rank = Ranking.rank(example_cards_with_royal_flush)
+            >>> type(rank)
+            RoyalFlush
+
+            >>> rank = Ranking.rank(example_cards_with_three_of_a_kind)
+            >>> type(rank)
+            ThreeOfAKind
+
+        """
         all_rankings = [RoyalFlush,
                         StraightFlush,
                         FourOfAKind,
@@ -18,6 +48,12 @@ class Ranking:
                         Pair,
                         Highcard]
 
+        # Search from the highest Rank (that is the most restrictive) to the
+        # lowest one. We know Highcard is kind of match-all-cases, so we can
+        # rely on this fact, so method will always return "some" instance of
+        # a Rank.
+        # Alternatively, we could consider raising exception in case no Rank
+        # has been matched.
         for rank_class in all_rankings:
             if rank_class.valid_for_cards(cards):
                 return rank_class()
@@ -25,12 +61,53 @@ class Ranking:
 
 @total_ordering
 class Rank(ABC):
+    """Represents an instance of a Rank. It will allow comparing Ranks.
+
+    There are a few strategies of ranking cards, each of which has it's own
+    implementation of Rank base class.
+
+    Once the instances of Ranks are initialised it is possible to compare them.
+
+    Examples
+    --------
+
+        >>> Straight() < FullHouse()
+        True
+
+        >>> TwoPairs() > Pair()
+        True
+
+        >>> sorted([FullHouse(), TwoPairs(), ThreeOfAKind()])
+        [<Rank: TwoPairs>, <Rank: ThreeOfAKind>, <Rank: FullHouse>]
+
+    """
+
     @abstractmethod
     def valid_for_cards(cards):
+        """It checks if provided set of cards fulfill criteria of a particular rank.
+
+        Parameters
+        ----------
+        cards : list(Card)
+            List of cards which will be ranked
+
+        Returns
+        -------
+        Boolean value that will indicate if the cards match criteria of a rank.
+        """
         pass
 
     @abstractmethod
     def rank_value(self):
+        """Returns an integer.
+
+        It's sole purpose is only for comparing purposes and the value doesn't
+        have any meaning outside this context.
+
+        Returns
+        -------
+        An integer that will be used for comparison between Rank instances
+        """
         pass
 
     def __eq__(self, other_rank):

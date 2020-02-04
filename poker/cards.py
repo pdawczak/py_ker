@@ -18,6 +18,7 @@ CARDS_VALUE_MAPPING = {
 
 
 class InvalidCardTokenError(Exception):
+    """Is raised in case parsed card token is invalid."""
     pass
 
 #####
@@ -32,7 +33,40 @@ class InvalidCardTokenError(Exception):
 
 @total_ordering
 class Card:
+    """Represents a Card that can be instantiated from card_token.
+
+    card_token is a two-element string that consists of card's value and suit
+    (in this order), eg: "2H".
+
+    Attributes
+    ----------
+    card_token : str
+        A card_token that is used when instantiating the Card object
+
+    value : int
+        An integer representation of the card's value. It will be used
+        internally for comparison purposes (comparing cards between each other)
+
+    suit : str
+        A single character string that represents the card's suit
+    """
+
     def __init__(self, card_token):
+        """Initialises an instance of a Card.
+
+        Parameters
+        ----------
+        card_token : str
+            It is a two-charactes string that will be used to determine card's
+            value and suit.
+
+        Raises
+        ------
+        InvalidCardTokenError
+            Is raised if the card's token is a string of a length different
+            than 2.
+        """
+
         self.card_token = card_token
 
         if len(card_token) != 2:
