@@ -11,45 +11,47 @@ from ..poker.cards import Card
 #   C - clubs
 #   D - diamonds
 
+NON_RANKED_CARDS = [Card("2S"), Card("4H"), Card("7D"), Card("KC"), Card("AC")]
+CARDS_WITH_A_PAIR = [Card("2S"), Card("4H"), Card("4D"), Card("KC"), Card("AC")]
+CARDS_WITH_TWO_PAIRS = [Card("2S"), Card("4H"), Card("4D"), Card("KC"), Card("KH")]
+CARDS_WITH_THREE_OF_A_KIND = [Card("5S"), Card("7C"), Card("KC"), Card("KH"), Card("KD")]
+CARDS_WITH_STRAIGHT = [Card("3C"), Card("4H"), Card("5D"), Card("6C"), Card("7S")]
+CARDS_WITH_FLUSH = [Card("2C"), Card("8C"), Card("9C"), Card("QC"), Card("KC")]
+CARDS_WITH_FULL_HOUSE = [Card("7C"), Card("7S"), Card("KC"), Card("KH"), Card("KD")]
+CARDS_WITH_FOUR_OF_A_KIND = [Card("5S"), Card("KC"), Card("KH"), Card("KD"), Card("KS")]
+CARDS_WITH_STRAIGHT_FLUSH = [Card("3C"), Card("4C"), Card("5C"), Card("6C"), Card("7C")]
+CARDS_WITH_ROYAL_FLUSH = [Card("TH"), Card("JH"), Card("QH"), Card("KH"), Card("AH")]
+
+
 def test_it_ranks_list_of_cards():
-    non_ranked_cards = [Card("2S"), Card("4H"), Card("7D"), Card("KC"), Card("AC")]
-    assert Highcard.valid_for_cards(non_ranked_cards)
+    assert Highcard.valid_for_cards(NON_RANKED_CARDS)
 
-    cards_with_a_pair = [Card("2S"), Card("4H"), Card("4D"), Card("KC"), Card("AC")]
-    assert Pair.valid_for_cards(cards_with_a_pair)
-    assert not Pair.valid_for_cards(non_ranked_cards)
+    assert Pair.valid_for_cards(CARDS_WITH_A_PAIR)
+    assert not Pair.valid_for_cards(NON_RANKED_CARDS)
 
-    cards_with_two_pairs = [Card("2S"), Card("4H"), Card("4D"), Card("KC"), Card("KH")]
-    assert TwoPairs.valid_for_cards(cards_with_two_pairs)
-    assert not TwoPairs.valid_for_cards(cards_with_a_pair)
+    assert TwoPairs.valid_for_cards(CARDS_WITH_TWO_PAIRS)
+    assert not TwoPairs.valid_for_cards(CARDS_WITH_A_PAIR)
 
-    cards_with_three_of_a_kind = [Card("5S"), Card("7C"), Card("KC"), Card("KH"), Card("KD")]
-    assert ThreeOfAKind.valid_for_cards(cards_with_three_of_a_kind)
-    assert not ThreeOfAKind.valid_for_cards(cards_with_a_pair)
+    assert ThreeOfAKind.valid_for_cards(CARDS_WITH_THREE_OF_A_KIND)
+    assert not ThreeOfAKind.valid_for_cards(CARDS_WITH_A_PAIR)
 
-    cards_with_straight = [Card("3C"), Card("4H"), Card("5D"), Card("6C"), Card("7S")]
-    assert Straight.valid_for_cards(cards_with_straight)
-    assert not Straight.valid_for_cards(cards_with_a_pair)
+    assert Straight.valid_for_cards(CARDS_WITH_STRAIGHT)
+    assert not Straight.valid_for_cards(CARDS_WITH_A_PAIR)
 
-    cards_with_flush = [Card("2C"), Card("8C"), Card("9C"), Card("QC"), Card("KC")]
-    assert Flush.valid_for_cards(cards_with_flush)
-    assert not Flush.valid_for_cards(cards_with_a_pair)
+    assert Flush.valid_for_cards(CARDS_WITH_FLUSH)
+    assert not Flush.valid_for_cards(CARDS_WITH_A_PAIR)
 
-    cards_with_full_house = [Card("7C"), Card("7S"), Card("KC"), Card("KH"), Card("KD")]
-    assert FullHouse.valid_for_cards(cards_with_full_house)
-    assert not FullHouse.valid_for_cards(cards_with_a_pair)
+    assert FullHouse.valid_for_cards(CARDS_WITH_FULL_HOUSE)
+    assert not FullHouse.valid_for_cards(CARDS_WITH_A_PAIR)
 
-    cards_with_four_of_a_kind = [Card("5S"), Card("KC"), Card("KH"), Card("KD"), Card("KS")]
-    assert FourOfAKind.valid_for_cards(cards_with_four_of_a_kind)
-    assert not FourOfAKind.valid_for_cards(cards_with_a_pair)
+    assert FourOfAKind.valid_for_cards(CARDS_WITH_FOUR_OF_A_KIND)
+    assert not FourOfAKind.valid_for_cards(CARDS_WITH_A_PAIR)
 
-    cards_with_straight_flush = [Card("3C"), Card("4C"), Card("5C"), Card("6C"), Card("7C")]
-    assert StraightFlush.valid_for_cards(cards_with_straight_flush)
-    assert not StraightFlush.valid_for_cards(cards_with_a_pair)
+    assert StraightFlush.valid_for_cards(CARDS_WITH_STRAIGHT_FLUSH)
+    assert not StraightFlush.valid_for_cards(CARDS_WITH_A_PAIR)
 
-    cards_with_royal_flush = [Card("TH"), Card("JH"), Card("QH"), Card("KH"), Card("AH")]
-    assert RoyalFlush.valid_for_cards(cards_with_royal_flush)
-    assert not RoyalFlush.valid_for_cards(cards_with_straight_flush)
+    assert RoyalFlush.valid_for_cards(CARDS_WITH_ROYAL_FLUSH)
+    assert not RoyalFlush.valid_for_cards(CARDS_WITH_STRAIGHT_FLUSH)
 
 
 def test_ranks_preserve_order():
